@@ -1,0 +1,104 @@
+package model;
+
+import robots.BasicAI;
+import robots.DeterministicNPAI;
+import robots.IRobot;
+import model.Hand;
+import util.Card;
+import util.CardGroup;
+
+public class Player{
+	private String name;
+	private int position;
+	private boolean isDealer;
+	private int totalPoints;
+	private Hand hand;
+	
+	private IRobot iR;
+	
+	public Player(String name){
+		this.name = name;
+		this.totalPoints=0;
+		hand = new Hand();
+	}
+	
+	public void addToHand(Card c){
+		hand.add(c);
+	}
+	
+	public void setAI(IRobot i){
+		this.iR = i;
+		//System.out.println("CALLED");
+	}
+	public IRobot getAI(){
+		return iR;
+	}
+	/*
+	public void setIRDeterministic(){
+		iR = new DeterministicNPAI(name);
+	}
+	
+	public void setIRIRobot(){
+		iR= new BasicAI(name);
+	}
+		*/
+	public String getName(){
+		return name;
+	}
+	
+	public int getPosition(){
+		return position;
+	}
+	
+	public CardGroup getPlay(TurnHistory tH, Hand h){
+		//if(iR.getClass() == new DeterministicNPAI("test").getClass() || iR.getClass() == new BasicAI("test").getClass()){
+			return iR.chooseCards(tH, h);
+		//}
+		//else{
+			//it was a human
+		//}
+	}
+	
+	public void setPosition(int position){
+		this.position = position;
+	}
+	
+	public void setDealer(boolean b){
+		this.isDealer=b;
+	}
+	
+	public boolean isDealer(){
+		return isDealer;
+	}
+	
+	public void addPoints(int points){
+		totalPoints += points;
+	}
+	
+	public void clearPoints(){
+		this.totalPoints = 0;
+	}
+	
+	public Hand getHand(){
+		return hand;
+	}
+	
+	public int getPoints(){
+		return totalPoints;
+	}
+	
+	public String toString(){
+		return this.name;
+	}
+	
+	public Player clone(){
+		Player p = new Player(this.getName());
+		p.setPosition(this.getPosition());
+		p.isDealer = this.isDealer;
+		p.addPoints(this.totalPoints);
+		for(Card c : this.hand){
+			p.hand.add(c);
+		}
+		return p;
+	}
+}
